@@ -41,6 +41,7 @@
                                    Text="{Binding FirstAmount}">
                                     <Entry.Behaviors>
                                         <behaviors:CompletedEntry/>
+                                        <behaviors:FocusedEntry/>
                                     </Entry.Behaviors>
                                 </Entry>
                                 <!--Currency-->
@@ -95,6 +96,7 @@
                                    Text="{Binding SecondAmount}">
                                     <Entry.Behaviors>
                                         <behaviors:CompletedEntry/>
+                                        <behaviors:FocusedEntry/>
                                     </Entry.Behaviors>
                                 </Entry>
                                 <!--Currency-->
