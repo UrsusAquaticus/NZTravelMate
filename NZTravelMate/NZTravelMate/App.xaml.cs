@@ -10,7 +10,7 @@ namespace NZTravelMate
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new Views.MainView();
         }
 
         protected override void OnStart()

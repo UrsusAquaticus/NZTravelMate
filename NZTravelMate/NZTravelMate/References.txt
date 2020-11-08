@@ -1,0 +1,10 @@
+﻿The Model-View-ViewModel Pattern
+https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-patterns/mvvm
+Add MVVM
+https://hub.packtpub.com/xamarin-how-to-add-a-mvvm-pattern-to-an-app-tutorial/
+
+UI Inspiration Reference
+https://i.pinimg.com/originals/55/7b/19/557b192e1cc068ae0412b318bd5fb0b3.png
+
+Best Practices
+https://github.com/futurice/windows-app-development-best-practices

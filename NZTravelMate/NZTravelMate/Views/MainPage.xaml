@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:NZTravelMate.Behaviours" 
+             x:Class="NZTravelMate.Views.MainView"
+             Title="Calculator">
+    <ContentPage.Resources>
+    </ContentPage.Resources>
+    <Grid>
+        <!--Content-->
+        <StackLayout BackgroundColor="Black">
+            <!--Header-->
+            <StackLayout Orientation="Horizontal" VerticalOptions="Start">
+                <!--Menu-->
+            </StackLayout>
+
+            <!--Body-->
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <ScrollView>
+                    <StackLayout>
+                        <!--///////////////////////////////////First///////////////////////////////////-->
+                        <Frame BackgroundColor="#222222" Padding="20, 40, 20, 40">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <!--Value-->
+                                <Entry x:Name="firstAmount"
+                                   ClassId="first"
+                                   Placeholder="Value"
+                                   PlaceholderColor="WhiteSmoke"
+                                   TextColor="WhiteSmoke"  
+                                   Keyboard="Numeric" 
+                                   ClearButtonVisibility="WhileEditing" 
+                                   ReturnType="Next" 
+                                   VerticalTextAlignment="Center"
+                                   FontSize="30"
+                                   Grid.Column="0"
+                                   HorizontalTextAlignment="End"
+                                   Text="{Binding FirstAmount}">
+                                    <Entry.Behaviors>
+                                        <behaviors:CompletedEntry/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <!--Currency-->
+                                <Picker x:Name="firstCurrency"
+                                    ClassId="first"
+                                    TextColor="WhiteSmoke" 
+                                    Title="Currency" 
+                                    TitleColor="Black"
+                                    FontSize="30"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Currencies}" 
+                                    ItemDisplayBinding="{Binding Code}"
+                                    SelectedIndex="{Binding FirstCurrency}">
+                                    <Picker.Behaviors>
+                                        <behaviors:PickerChanged/>
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </Grid>
+                        </Frame>
+                        <!--Output-->
+                        <Frame BackgroundColor="#333333" Padding="20, 0, 20, 0">
+                            <Label x:Name="firstOutput"
+                               ClassId="first"
+                               Text="Value Currency"
+                               TextColor="WhiteSmoke"
+                               VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="End"
+                               FontSize="30"
+                               Grid.Row="1"/>
+                        </Frame>
+
+                        <!--///////////////////////////////////Second///////////////////////////////////-->
+                        <Frame BackgroundColor="#222222" Padding="20, 40, 20, 40">
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <!--Value-->
+                                <Entry x:Name="secondAmount"
+                                   ClassId="second"
+                                   Placeholder="Value"
+                                   PlaceholderColor="WhiteSmoke"
+                                   TextColor="WhiteSmoke"  
+                                   Keyboard="Numeric" 
+                                   ClearButtonVisibility="WhileEditing" 
+                                   ReturnType="Next" 
+                                   VerticalTextAlignment="Center"
+                                   FontSize="30"
+                                   Grid.Column="0"
+                                   HorizontalTextAlignment="End"
+                                   Text="{Binding SecondAmount}">
+                                    <Entry.Behaviors>
+                                        <behaviors:CompletedEntry/>
+                                    </Entry.Behaviors>
+                                </Entry>
+                                <!--Currency-->
+                                <Picker x:Name="secondCurrency" 
+                                    ClassId="second"
+                                    TextColor="WhiteSmoke" 
+                                    Title="Currency" 
+                                    TitleColor="Black"
+                                    FontSize="30"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Currencies}" 
+                                    ItemDisplayBinding="{Binding Code}"
+                                    SelectedIndex="{Binding SecondCurrency}">
+                                    <Picker.Behaviors>
+                                        <behaviors:PickerChanged/>
+                                    </Picker.Behaviors>
+                                </Picker>
+                            </Grid>
+                        </Frame>
+                        <!--Output-->
+                        <Frame BackgroundColor="#333333" Padding="20, 0, 20, 0">
+                            <Label x:Name="secondOutput"
+                               ClassId="second"
+                               Text="Value Currency"
+                               TextColor="WhiteSmoke"
+                               VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="End"
+                               FontSize="30"
+                               Grid.Row="1"/>
+                        </Frame>
+                    </StackLayout>
+                </ScrollView>
+                
+                <!--TestDisplay-->
+                <ListView x:Name="CurrencyView"
+                          ItemsSource="{Binding Currencies}"
+                          BackgroundColor="White"
+                          IsVisible="false">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Label Text="{Binding Code}" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="{Binding Name}" />
+                                    <Label Grid.Column="2" Text="{Binding Rate}" HorizontalTextAlignment="End" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+            <!--Footer-->
+            <StackLayout Orientation="Horizontal" VerticalOptions="End">
+                <!-- Sales tax?-->
+                <Frame BackgroundColor="#222222" Padding="10, 0, 10, 0" CornerRadius="0">
+                    <Entry x:Name="salesTax"
+                   Placeholder="Sales Tax?"
+                   PlaceholderColor="WhiteSmoke"
+                   TextColor="WhiteSmoke"  
+                   Keyboard="Numeric" 
+                   ClearButtonVisibility="WhileEditing" 
+                   ReturnType="Next" 
+                   VerticalTextAlignment="Center" 
+                   HorizontalTextAlignment="Center"
+                   FontSize="30"
+                   />
+                </Frame>
+            </StackLayout>
+        </StackLayout>
+        <!--Overlay-->
+        <!--<ContentView x:Name="overlay" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"  AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding isLoading}">
+            <ActivityIndicator  IsRunning="True" IsVisible="True" Color="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+        </ContentView>-->
+    </Grid>
+</ContentPage>
