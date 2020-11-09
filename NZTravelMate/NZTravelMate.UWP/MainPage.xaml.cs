@@ -20,7 +20,7 @@ namespace NZTravelMate.UWP
     {
         public MainPage()
         {
-            ApplicationView.PreferredLaunchViewSize = new Size(400, 600);
+            ApplicationView.PreferredLaunchViewSize = new Size(800, 600);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             this.InitializeComponent();
             LoadApplication(new NZTravelMate.App());

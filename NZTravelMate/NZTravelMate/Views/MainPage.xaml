@@ -5,6 +5,52 @@
              x:Class="NZTravelMate.Views.MainView"
              Title="Calculator">
     <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="pickerCurrencyStyle" TargetType="Picker">
+                <Setter Property="TextColor"
+                        Value="White"/>
+                <Setter Property="BackgroundColor"
+                        Value="Transparent"/>
+                <Setter Property="Title"
+                        Value="Currency"/>
+                <Setter Property="TitleColor"
+                        Value="Black"/>
+                <Setter Property="FontSize"
+                        Value="30"/>
+                <Setter Property="VerticalTextAlignment"
+                        Value="Center"/>
+                <Setter Property="HorizontalTextAlignment"
+                        Value="Center"/>
+                <Setter Property="ItemsSource"
+                        Value="{Binding Currencies}"/>
+            </Style>
+            <Style x:Key="entryValueStyle" TargetType="Entry">
+                <Setter Property="TextColor"
+                        Value="White"/>
+                <Setter Property="Keyboard"
+                        Value="Numeric"/>
+                <Setter Property="ClearButtonVisibility"
+                        Value="WhileEditing"/>
+                <Setter Property="FontSize"
+                        Value="60"/>
+                <Setter Property="ReturnType"
+                        Value="Next"/>
+                <Setter Property="VerticalTextAlignment"
+                        Value="Center"/>
+                <Setter Property="HorizontalTextAlignment"
+                        Value="End"/>
+            </Style>
+            <Style x:Key="labelOutputStyle" TargetType="Label">
+                <Setter Property="TextColor"
+                        Value="White"/>
+                <Setter Property="FontSize"
+                        Value="30"/>
+                <Setter Property="VerticalTextAlignment"
+                        Value="End"/>
+                <Setter Property="HorizontalTextAlignment"
+                        Value="End"/>
+            </Style>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
         <!--Content-->
@@ -18,126 +64,103 @@
             <StackLayout VerticalOptions="CenterAndExpand">
                 <ScrollView>
                     <StackLayout>
-                        <!--///////////////////////////////////First///////////////////////////////////-->
-                        <Frame BackgroundColor="#222222" 
-                               Padding="20, 0, 20, 0">
-                            
-                            <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <!--Currency-->
-                                <Picker ClassId="first"
-                                    TextColor="WhiteSmoke" 
-                                    Title="Currency" 
-                                    TitleColor="Black"
-                                    FontSize="30"
-                                    Grid.Column="0"
-                                    ItemsSource="{Binding Currencies}" 
-                                    ItemDisplayBinding="{Binding Code}"
-                                    SelectedIndex="{Binding FirstCurrency}">
-                                    <Picker.Behaviors>
-                                        <behaviors:PickerChanged/>
-                                    </Picker.Behaviors>
-                                </Picker>
-                                <!--Value-->
-                                <Entry ClassId="first"
-                                   Placeholder="Value"
-                                   PlaceholderColor="WhiteSmoke"
-                                   TextColor="WhiteSmoke"  
-                                   Keyboard="Numeric" 
-                                   ClearButtonVisibility="WhileEditing" 
-                                   ReturnType="Next" 
-                                   VerticalTextAlignment="End"
-                                   FontSize="60"
-                                   Grid.Column="1"
-                                   HorizontalTextAlignment="End"
-                                   Text="{Binding FirstAmount}">
-                                    <Entry.Behaviors>
-                                        <behaviors:CompletedEntry/>
-                                        <behaviors:FocusedEntry/>
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </Grid>
-                        </Frame>
-                        <!--Output-->
-                        <Frame BackgroundColor="#333333" Padding="20, 0, 20, 0">
-                            <Label ClassId="first"
-                               Text="{Binding FirstOutput}"
-                               TextColor="WhiteSmoke"
-                               VerticalTextAlignment="Center" 
-                               HorizontalTextAlignment="End"
-                               FontSize="30"
-                               Grid.Row="1"/>
-                        </Frame>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <!--First Input > First Output > Swap Button > Second Input > Tax Output > Second Output-->
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
 
-                        <!--///////////////////////////////////Second///////////////////////////////////-->
-                        <Frame BackgroundColor="#222222" 
-                               Padding="20, 0, 20, 0">
-                            <Grid >
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <!--Currency-->
-                                <Picker ClassId="second"
-                                    TextColor="WhiteSmoke" 
-                                    Title="Currency" 
-                                    TitleColor="Black"
-                                    FontSize="30"
-                                    Grid.Column="0"
-                                    ItemsSource="{Binding Currencies}" 
+                            <!--///////////////////////////////////First Input///////////////////////////////////-->
+
+                            <!--Currency Picker-->
+                            <Picker Style="{StaticResource pickerCurrencyStyle}"
                                     ItemDisplayBinding="{Binding Code}"
-                                    SelectedIndex="{Binding SecondCurrency}">
-                                    <Picker.Behaviors>
-                                        <behaviors:PickerChanged/>
-                                    </Picker.Behaviors>
-                                </Picker>
-                                <!--Value-->
-                                <Entry ClassId="second"
-                                   Placeholder="Value"
-                                   PlaceholderColor="WhiteSmoke"
-                                   TextColor="WhiteSmoke"  
-                                   Keyboard="Numeric" 
-                                   ClearButtonVisibility="WhileEditing" 
-                                   ReturnType="Next" 
-                                   VerticalTextAlignment="End"
-                                   FontSize="60"
+                                    SelectedIndex="{Binding FirstCurrency}"
+                                    Grid.Column="0"
+                                    Grid.Row="0">
+                                <Picker.Behaviors>
+                                    <behaviors:PickerChanged/>
+                                </Picker.Behaviors>
+                            </Picker>
+                            <!--Value Entry-->
+                            <Entry Style="{StaticResource entryValueStyle}"
+                                   Text="{Binding FirstAmount}"
                                    Grid.Column="1"
-                                   HorizontalTextAlignment="End"
-                                   Text="{Binding SecondAmount}">
-                                    <Entry.Behaviors>
-                                        <behaviors:CompletedEntry/>
-                                        <behaviors:FocusedEntry/>
-                                    </Entry.Behaviors>
-                                </Entry>
-                            </Grid>
-                        </Frame>
-                        <!--TaxOutput-->
-                        <Frame BackgroundColor="#333333"
-                               Padding="20, 0, 20, 0"
-                               IsVisible="{Binding TaxVisible}">
-                            <Label ClassId="second"
-                               Text="{Binding TaxOutput}"
-                               TextColor="WhiteSmoke"
-                               VerticalTextAlignment="Center" 
-                               HorizontalTextAlignment="End"
-                               FontSize="30"/>
-                        </Frame>
-                        <!--Output-->
-                        <Frame BackgroundColor="#333333" Padding="20, 0, 20, 0">
-                            <Label ClassId="second"
-                               Text="{Binding SecondOutput}"
-                               TextColor="WhiteSmoke"
-                               VerticalTextAlignment="Center" 
-                               HorizontalTextAlignment="End"
-                               FontSize="30"/>
-                        </Frame>
+                                   Grid.Row="0">
+                                <Entry.Behaviors>
+                                    <behaviors:CompletedEntry/>
+                                    <behaviors:FocusedEntry/>
+                                </Entry.Behaviors>
+                            </Entry>
+                            <!--Output-->
+                            <Frame Grid.Column="1"
+                                   Grid.Row="1">
+                                <Label Text="{Binding FirstOutput}"
+                                       Style="{StaticResource labelOutputStyle}"/>
+                            </Frame>
+
+                            <!--///////////////////////////////////Swap Currency Button///////////////////////////////////-->
+
+                            <Button Command="{Binding SwapCommand}"
+                                    BackgroundColor="WhiteSmoke"
+                                    TextColor="Black"
+                                    FontSize="30"
+                                    Text="Swap"
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    Grid.RowSpan="2"/>
+
+                            <!--///////////////////////////////////Second Input///////////////////////////////////-->
+
+                            <!--Currency Picker-->
+                            <Picker Style="{StaticResource pickerCurrencyStyle}"
+                                    ItemDisplayBinding="{Binding Code}"
+                                    SelectedIndex="{Binding SecondCurrency}"
+                                    Grid.Column="0"
+                                    Grid.Row="3">
+                                <Picker.Behaviors>
+                                    <behaviors:PickerChanged/>
+                                </Picker.Behaviors>
+                            </Picker>
+                            <!--Value Entry-->
+                            <Entry Style="{StaticResource entryValueStyle}"
+                                   Text="{Binding SecondAmount}"
+                                   Grid.Column="1"
+                                   Grid.Row="3">
+                                <Entry.Behaviors>
+                                    <behaviors:CompletedEntry/>
+                                    <behaviors:FocusedEntry/>
+                                </Entry.Behaviors>
+                            </Entry>
+                            <!--Outputs-->
+                            <StackLayout Grid.Column="1"
+                                         Grid.Row="4">
+                                <!--TaxOutput-->
+                                <Frame IsVisible="{Binding TaxVisible}">
+                                    <Label Text="{Binding TaxOutput}"
+                                           Style="{StaticResource labelOutputStyle}"/>
+                                </Frame>
+                                <!--Output-->
+                                <Frame>
+                                    <Label Text="{Binding SecondOutput}"
+                                           Style="{StaticResource labelOutputStyle}"/>
+                                </Frame>
+                            </StackLayout>
+                            
+                        </Grid>
                     </StackLayout>
                 </ScrollView>
                 
-                <!--TestDisplay-->
+                <!--TestDisplay, Not used-->
                 <ListView ItemsSource="{Binding Currencies}"
                           BackgroundColor="White"
                           IsVisible="false">
@@ -157,42 +180,32 @@
 
             <!--Footer-->
             <StackLayout Orientation="Horizontal" VerticalOptions="End">
-                <!--///////////////////////////////////Third///////////////////////////////////-->
-                <Frame BackgroundColor="#222222"
-                               Padding="20, 0, 20, 0">
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <!--Value-->
-                        <Entry ClassId="second"
-                                   Placeholder="Sales Tax"
-                                   PlaceholderColor="WhiteSmoke"
-                                   TextColor="WhiteSmoke"  
-                                   Keyboard="Numeric" 
-                                   ClearButtonVisibility="WhileEditing" 
-                                   ReturnType="Next" 
-                                   VerticalTextAlignment="Center"
-                                   HorizontalTextAlignment="End"
-                                   FontSize="30"
-                                   Grid.Column="0"
-                                   Text="{Binding TaxInput}">
-                            <Entry.Behaviors>
-                                <behaviors:CompletedEntry/>
-                                <behaviors:FocusedEntry/>
-                            </Entry.Behaviors>
-                        </Entry>
-                        <Label ClassId="second"
-                                   Text="%"
-                                   TextColor="WhiteSmoke"
-                                   VerticalTextAlignment="Center" 
-                                   HorizontalTextAlignment="Start"
-                                   Grid.Column="1"
-                                   FontSize="30"/>
-                    </Grid>
-                </Frame>
+                <!--///////////////////////////////////Tax Input///////////////////////////////////-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Value-->
+                    <Entry  Style="{StaticResource entryValueStyle}"
+                                Text="{Binding TaxInput}"
+                                FontSize="30"
+                                Placeholder="Sales Tax"
+                                PlaceholderColor="White"
+                                Grid.Column="0">
+                        <Entry.Behaviors>
+                            <behaviors:CompletedEntry/>
+                            <behaviors:FocusedEntry/>
+                        </Entry.Behaviors>
+                    </Entry>
+                    <Label  Text="%"
+                                TextColor="White"
+                                VerticalTextAlignment="Center" 
+                                HorizontalTextAlignment="Start"
+                                Grid.Column="1"
+                                FontSize="30"/>
+                </Grid>
             </StackLayout>
         </StackLayout>
         <!--Overlay-->

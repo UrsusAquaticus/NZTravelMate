@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace NZTravelMate.ViewModels
@@ -28,6 +29,8 @@ namespace NZTravelMate.ViewModels
         bool isCalculating = false;
 
         #region Exposed Bindables
+        //Swap is assigned in the constructor
+        public ICommand SwapCommand { private set; get; }
         public ObservableCollection<Currency> Currencies
         {
             get { return _currencies; }
@@ -130,6 +133,13 @@ namespace NZTravelMate.ViewModels
         public CurrencyViewModel(ObservableCollection<Currency> currencies)
         {
             Currencies = currencies;
+
+            //Set the property to a new Command containing the method I want to call
+            SwapCommand = new Command(
+            execute: () =>
+            {
+                SwapCurrencies();
+            });
         }
 
         //Calculation
@@ -202,6 +212,15 @@ namespace NZTravelMate.ViewModels
             {
                 isCalculating = false;
             }
+        }
+
+        public void SwapCurrencies()
+        {
+            //Bit hacky relying on make calculation to flip it
+            isCalculating = true;
+            SecondCurrency = oldSecondIndex;
+            isCalculating = false;
+            FirstCurrency = oldSecondIndex;
         }
     }
 }

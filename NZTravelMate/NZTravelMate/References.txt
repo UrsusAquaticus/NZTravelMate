@@ -3,8 +3,6 @@ https://docs.microsoft.com/en-us/xamarin/xamarin-forms/enterprise-application-pa
 Add MVVM
 https://hub.packtpub.com/xamarin-how-to-add-a-mvvm-pattern-to-an-app-tutorial/
 
-UI Inspiration Reference
-
 
 Best Practices
 https://github.com/futurice/windows-app-development-best-practices

@@ -13,7 +13,7 @@ namespace NZTravelMate.Views
     public partial class MainView : ContentPage
     {
         //The api string requires a "base currency code" to work off
-        String apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
+        string apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
         string baseCode = "NZD"; //New Zealand Dollar
         string isoFile = "NZTravelMate.iso-4217.json";
 
