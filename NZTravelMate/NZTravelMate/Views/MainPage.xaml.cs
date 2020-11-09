@@ -15,7 +15,7 @@ namespace NZTravelMate.Views
         //The api string requires a "base currency code" to work off
         String apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
         string baseCode = "NZD"; //New Zealand Dollar
-        //string isoFile = "iso-4217.json";
+        string isoFile = "NZTravelMate.iso-4217.json";
 
         public MainView()
         {
@@ -26,10 +26,12 @@ namespace NZTravelMate.Views
 
         async void GetCurrencyViewModel()
         {
-            ExchangeService ES = new ExchangeService();
-            ConversionRates CR = await ES.GetRatesDataAsync(apiString + baseCode);
-            var currencies = CurrencyFactory.GetCurrencies(CR);
-            this.BindingContext = new ViewModels.CurrencyViewModel(currencies);
+            var ERA = new ExchangeRateApi();
+            var CR = await ERA.GetRatesDataAsync(apiString + baseCode);
+            var namesByCode = await CurrencyDataReader.NamesByCode(isoFile);
+            var currencies = CurrencyBuilder.GetCurrencies(CR, namesByCode);
+
+            this.BindingContext = new CurrencyViewModel(currencies);
         }
     }
 }

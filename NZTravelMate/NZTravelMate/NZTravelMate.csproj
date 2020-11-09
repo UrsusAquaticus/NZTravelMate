@@ -11,8 +11,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="iso-4217.json" />
+    <None Remove="References.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="iso-4217.json" />
+    <EmbeddedResource Include="References.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1560" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
   </ItemGroup>
 </Project>

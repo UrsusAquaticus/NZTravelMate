@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Xamarin.Forms;
 
@@ -12,16 +13,21 @@ namespace NZTravelMate.ViewModels
     {
         private ObservableCollection<Currency> _currencies;
 
-        private string _firstAmount = "1";
-        private string _secondAmount = "1";
+        private double _firstAmount = 1;
+        private double _secondAmount = 1;
         private int _firstCurrency = 32; // NZD
         private int _secondCurrency = 2; // AUD
+        private string _firstOutput = "";
+        private string _secondOutput = "";
+        private double _taxInput = 0;
+        private string _taxOutput = "";
+        private bool _taxVisible = false;
 
         int oldFirstIndex, oldSecondIndex;
 
         bool isCalculating = false;
 
-        //What the View binds to
+        #region Exposed Bindables
         public ObservableCollection<Currency> Currencies
         {
             get { return _currencies; }
@@ -31,7 +37,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
-        public string FirstAmount
+        public double FirstAmount
         {
             get { return _firstAmount; }
             set
@@ -41,7 +47,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
-        public string SecondAmount
+        public double SecondAmount
         {
             get { return _secondAmount; }
             set
@@ -71,6 +77,54 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
+        public string FirstOutput
+        {
+            get { return _firstOutput; }
+            set
+            {
+                _firstOutput = value;
+                OnPropertyChanged();
+            }
+        }
+        public string SecondOutput
+        {
+            get { return _secondOutput; }
+            set
+            {
+                _secondOutput = value;
+                OnPropertyChanged();
+            }
+        }
+        //Tax calculation part
+        public double TaxInput
+        {
+            get { return _taxInput; }
+            set
+            {
+                _taxInput = value;
+                OnPropertyChanged();
+                MakeCalculation(true);
+            }
+        }
+        public string TaxOutput
+        {
+            get { return _taxOutput; }
+            set
+            {
+                _taxOutput = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool TaxVisible
+        {
+            get { return _taxVisible; }
+            set
+            {
+                _taxVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
         //Constructor
         public CurrencyViewModel(ObservableCollection<Currency> currencies)
@@ -86,8 +140,8 @@ namespace NZTravelMate.ViewModels
             {
                 isCalculating = true;
 
-                double firstValue = FirstAmount != "" ? Convert.ToDouble(FirstAmount) : 1;
-                double secondValue = SecondAmount != "" ? Convert.ToDouble(SecondAmount) : 1;
+                double firstValue = FirstAmount != 0 ? FirstAmount : 1;
+                double secondValue = SecondAmount != 0 ? SecondAmount : 1;
 
                 int leftIndex = FirstCurrency;
                 int rightIndex = SecondCurrency;
@@ -106,25 +160,43 @@ namespace NZTravelMate.ViewModels
                 if (isFirst)
                 {
                     SecondAmount = Math.Round(
-                        CurrencyConverter.GetValueByRates(
+                        CalculationStation.GetValueByRates(
                         firstValue,
                         _currencies[leftIndex].Rate,
                         _currencies[rightIndex].Rate
-                        ), 2).ToString();
+                        ), 2);
                     oldFirstIndex = leftIndex;
                     oldSecondIndex = rightIndex;
                 }
                 else
                 {
                     FirstAmount = Math.Round(
-                        CurrencyConverter.GetValueByRates(
+                        CalculationStation.GetValueByRates(
                         secondValue,
                         _currencies[rightIndex].Rate,
                         _currencies[leftIndex].Rate
-                        ), 2).ToString();
+                        ), 2);
                     oldFirstIndex = rightIndex;
                     oldSecondIndex = leftIndex;
                 }
+
+                double taxValue = 0;
+                //Show or hide Tax
+                if (_taxInput > 0)
+                {
+                    taxValue = Math.Round(SecondAmount * (_taxInput * 0.01), 2);
+                    TaxOutput = $"+ Sales Tax: {taxValue}";
+                    TaxVisible = true;
+                }
+                else
+                {
+                    _taxInput = 0;
+                    TaxVisible = false;
+                }
+
+                //Final display
+                FirstOutput = $"{_firstAmount} {_currencies[oldFirstIndex].Name}";
+                SecondOutput = $"{_secondAmount + taxValue} {_currencies[oldSecondIndex].Name}";
             }
             finally
             {

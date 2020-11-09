@@ -10,10 +10,10 @@ namespace NZTravelMate.Models
 {
     //https://www.exchangerate-api.com/docs/c-sharp-currency-api
     //https://docs.microsoft.com/en-us/xamarin/get-started/tutorials/web-service/?tabs=vswin&tutorial-step=2
-    class ExchangeService
+    class ExchangeRateApi
     {
         HttpClient _client;
-        public ExchangeService()
+        public ExchangeRateApi()
         {
             _client = new HttpClient();
         }

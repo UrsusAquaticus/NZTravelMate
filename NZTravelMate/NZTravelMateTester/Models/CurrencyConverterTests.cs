@@ -19,7 +19,7 @@ namespace NZTravelMate.Models.Tests
             double expected = 2.66666666667;
 
             //Act
-            var actual = CurrencyConverter.GetValueByRates(value, leftRate, rightRate);
+            var actual = CalculationStation.GetValueByRates(value, leftRate, rightRate);
 
             //Assert
             //Close enough

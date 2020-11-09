@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZTravelMate.Android", "NZT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZTravelMate.iOS", "NZTravelMate\NZTravelMate.iOS\NZTravelMate.iOS.csproj", "{D7153F8E-AF22-4557-A136-EEA57F5DEC3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZTravelMate", "NZTravelMate\NZTravelMate\NZTravelMate.csproj", "{AFA0AC08-C637-4CCD-A00E-6AF7F5E525F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NZTravelMate", "NZTravelMate\NZTravelMate\NZTravelMate.csproj", "{AFA0AC08-C637-4CCD-A00E-6AF7F5E525F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NZTravelMateTester", "NZTravelMate\NZTravelMateTester\NZTravelMateTester.csproj", "{5F291E36-F98D-4B71-9475-91B76907F054}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NZTravelMateTester", "NZTravelMate\NZTravelMateTester\NZTravelMateTester.csproj", "{5F291E36-F98D-4B71-9475-91B76907F054}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

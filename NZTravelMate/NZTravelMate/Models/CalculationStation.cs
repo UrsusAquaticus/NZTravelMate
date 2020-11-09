@@ -6,11 +6,11 @@ using System.Text;
 
 namespace NZTravelMate.Models
 {
-    public class CurrencyConverter
+    public class CalculationStation
     {
         //Requires a Currency View Model
         private CurrencyViewModel _currencyViewModel;
-        public CurrencyConverter(CurrencyViewModel currencyViewModel)
+        public CalculationStation(CurrencyViewModel currencyViewModel)
         {
             _currencyViewModel = currencyViewModel;
         }
