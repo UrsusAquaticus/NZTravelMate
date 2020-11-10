@@ -12,6 +12,8 @@ namespace NZTravelMate.Models
 {
     static class CurrencyDataReader
     {
+        //https://docs.microsoft.com/en-us/dotnet/api/system.reflection.assembly.getmanifestresourcestream?view=netcore-3.1#System_Reflection_Assembly_GetManifestResourceStream_System_String_
+
         public async static Task<Dictionary<string, string>> NamesByCode(string targetFile)
         {
             var fileStream = GetFileStream(targetFile);
@@ -24,18 +26,21 @@ namespace NZTravelMate.Models
         static Stream GetFileStream(string targetFile)
         {
             Stream stream = null;
-            try {
+            try
+            {
+                //Get the assembly so you can find the embeded resource file
                 var assembly = IntrospectionExtensions.GetTypeInfo(typeof(CurrencyDataReader)).Assembly;
                 stream = assembly.GetManifestResourceStream(targetFile); 
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Stream Failed", ex.Message);
+                Debug.WriteLine("\tStream Failed: {0}", ex.Message);
             }
             //Set up to read json file
             return stream;
         }
 
+        //Read from .JSON file
         static async Task<List<RawCurrencyData>> GetRawCurrencyData(Stream stream)
         {
             List<RawCurrencyData> currencyData = new List<RawCurrencyData>();
@@ -68,7 +73,8 @@ namespace NZTravelMate.Models
             {
                 foreach (RawCurrencyData RCD in rawCurrencyData)
                 {
-                    if (!NameByCode.ContainsKey(RCD.Alphabetic_Code)) NameByCode.Add(RCD.Alphabetic_Code, RCD.Currency);
+                    if (!NameByCode.ContainsKey(RCD.Alphabetic_Code)) 
+                        NameByCode.Add(RCD.Alphabetic_Code, RCD.Currency);
                 }
             }
             catch (Exception ex)

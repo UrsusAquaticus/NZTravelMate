@@ -7,7 +7,7 @@ using System.Text;
 namespace NZTravelMate.Models.Tests
 {
     [TestClass()]
-    public class CurrencyConverterTests
+    public class CalculationStationTests
     {
         [TestMethod()]
         public void GetValueByRatesTest()
