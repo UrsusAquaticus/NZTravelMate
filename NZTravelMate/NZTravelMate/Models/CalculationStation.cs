@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
 
 namespace NZTravelMate.Models
@@ -20,12 +21,19 @@ namespace NZTravelMate.Models
         {
             //left rate converted to right rate
             //To convert from one currency to another, first convert to NZD 
+            try
+            {
+                //E.g USD -> NZD 
+                double baseValue = value / left;
 
-            //E.g USD -> NZD 
-            double baseValue = value / left;
-
-            //E.G NZD -> AUS
-            return baseValue * right;
+                //E.G NZD -> AUS
+                return baseValue * right;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("\tCalculation Failed: {0}", ex.Message);
+                return 0;
+            }
         }
     }
 }

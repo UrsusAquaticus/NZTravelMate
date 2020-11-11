@@ -25,7 +25,7 @@ namespace NZTravelMate.Behaviours
         {
             var entry = ((Entry)sender);
             var text = entry.Text;
-            Debug.WriteLine($"{entry.ClassId}: {text}");
+            //Debug.WriteLine($"{entry.ClassId}: {text}");
         }
     }
     public class FocusedEntry : Behavior<Entry>
@@ -69,7 +69,7 @@ namespace NZTravelMate.Behaviours
             int selectedIndex = picker.SelectedIndex;
 
             //debugging
-            Debug.WriteLine($"{picker.ClassId}: {selectedIndex}");
+            //Debug.WriteLine($"{picker.ClassId}: {selectedIndex}");
         }
     }
 }

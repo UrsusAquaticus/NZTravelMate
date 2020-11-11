@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,7 +13,17 @@ namespace NZTravelMate.ViewModels
 {
     public class CurrencyViewModel : ViewModelBase
     {
+        //The api string requires a "base currency code" to work off
+        string apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
+        string baseCode = "NZD"; //New Zealand Dollar
+        string isoFile = "NZTravelMate.iso-4217.json";
+
         private ObservableCollection<Currency> _currencies;
+        private ICurrencyStore _currencyStore;
+        private AppState _appState;
+        private IAppStateStore _appStateStore;
+
+        private bool _isDataLoaded;
 
         private double _firstAmount = 1;
         private double _secondAmount = 1;
@@ -24,13 +35,28 @@ namespace NZTravelMate.ViewModels
         private string _taxOutput = "";
         private bool _taxVisible = false;
 
-        int oldFirstIndex, oldSecondIndex;
-
         bool isCalculating = false;
 
         #region Exposed Bindables
         //Swap is assigned in the constructor
         public ICommand SwapCommand { private set; get; }
+        public ICommand LoadDataCommand { get; private set; }
+        public ICommand SaveAppStateDataCommand { get; private set; }
+        public AppState CurrentState
+        {
+            get { return _appState; }
+            set
+            {
+                _appState = value;
+                _firstCurrency = _appState.FirstIndex;
+                _secondCurrency = _appState.SecondIndex;
+                //Update the appState table
+                Debug.WriteLine($"{_appState.Id}, {_appState.FirstIndex}, {_appState.SecondIndex}");
+                SaveAppStateDataCommand.Execute(null);
+
+                OnPropertyChanged();
+            }
+        }
         public ObservableCollection<Currency> Currencies
         {
             get { return _currencies; }
@@ -130,22 +156,114 @@ namespace NZTravelMate.ViewModels
         #endregion
 
         //Constructor
-        public CurrencyViewModel(ObservableCollection<Currency> currencies)
+        public CurrencyViewModel(SQLiteCurrencyStore currencyStore, SQLiteAppStateStore appStateStore)
         {
-            Currencies = currencies;
+            _currencyStore = currencyStore;
+            _appStateStore = appStateStore;
 
             //Set the property to a new Command containing the method I want to call
-            SwapCommand = new Command(
-            execute: () =>
+            SwapCommand = new Command(execute: () => { SwapCurrencies(); });
+            LoadDataCommand = new Command(async () => await LoadData());
+            SaveAppStateDataCommand = new Command(async () => await SaveAppStateData());
+        }
+
+        //Load Database
+        private async Task LoadData()
+        {
+            if (_isDataLoaded)
+                return;
+            try
             {
+                //Get values from API connection
+                var ERA = new ExchangeRateApi();
+                var CR = await ERA.GetRatesDataAsync(apiString + baseCode);
+                if(CR != null)
+                {
+                    //Get the names from iso file
+                    var namesByCode = await CurrencyDataReader.NamesByCode(isoFile);
+                    Currencies = CurrencyBuilder.GetCurrencies(CR, namesByCode);
+
+                    //Save newly constructed currency data to database
+                    await SaveCurrencyData(_currencies);
+                }
+                else
+                {
+                    //If API failure load data from Database
+                    Currencies = await _currencyStore.GetCurrenciesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("\tData Failed to Load: {0}", ex.Message);
+            }
+            try
+            {
+                //Load previous state
+                var oldState = await _appStateStore.GetAppStateAsync();
+                if (oldState == null)
+                {
+                    Debug.WriteLine("OLD STATE IS NULL");
+                    var newState = new AppState { Id = 1, FirstIndex = 32, SecondIndex = 2 };
+                    await _appStateStore.AddAppState(newState);
+                    CurrentState = newState;
+                }
+                else
+                {
+                    Debug.WriteLine("READING FROM OLD STATE");
+                    CurrentState = oldState;
+                }
+
+                _isDataLoaded = true;
+                //Hacky way to refresh pickers
                 SwapCurrencies();
-            });
+                SwapCurrencies();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("\tApp State Failed to Load: {0}", ex.Message);
+            }
+        }
+
+        private async Task SaveAppStateData()
+        {
+            if (!_isDataLoaded)
+                return;
+            try
+            {
+                await _appStateStore.UpdateAppState(_appState);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("\tData Failed to Save: {0}", ex.Message);
+            }
+        }
+
+
+        //Save or update the currency database
+        async Task SaveCurrencyData(ObservableCollection<Currency> currencies)
+        {
+            Debug.WriteLine($"THERE ARE {currencies.Count}");
+            foreach (var currency in currencies)
+            {
+                var databaseObject = await _currencyStore.GetCurrency(currency.Code);
+                //If it exists in the database, update it. Otherwise create it
+                if (databaseObject == null)
+                {
+                    Debug.WriteLine($"TRYING TO CREATE {currency.Code}");
+                    await _currencyStore.AddCurrency(currency);
+                }
+                else
+                {
+                    Debug.WriteLine($"TRYING TO UPDATE {currency.Code}");
+                    await _currencyStore.UpdateCurrency(currency);
+                }
+            }
         }
 
         //Calculation
         public void MakeCalculation(bool isFirst)
         {
-            if (isCalculating) return;
+            if (isCalculating || !_isDataLoaded) return;
             try
             {
                 isCalculating = true;
@@ -159,8 +277,8 @@ namespace NZTravelMate.ViewModels
                 //If they have the same currency, flip the last pair of currencies around
                 if (leftIndex == rightIndex)
                 {
-                    leftIndex = oldSecondIndex;
-                    rightIndex = oldFirstIndex;
+                    leftIndex = CurrentState.SecondIndex;
+                    rightIndex = CurrentState.FirstIndex;
 
                     FirstCurrency = leftIndex;
                     SecondCurrency = rightIndex;
@@ -175,8 +293,8 @@ namespace NZTravelMate.ViewModels
                         _currencies[leftIndex].Rate,
                         _currencies[rightIndex].Rate
                         ), 2);
-                    oldFirstIndex = leftIndex;
-                    oldSecondIndex = rightIndex;
+                    CurrentState.FirstIndex = leftIndex;
+                    CurrentState.SecondIndex = rightIndex;
                 }
                 else
                 {
@@ -186,8 +304,8 @@ namespace NZTravelMate.ViewModels
                         _currencies[rightIndex].Rate,
                         _currencies[leftIndex].Rate
                         ), 2);
-                    oldFirstIndex = rightIndex;
-                    oldSecondIndex = leftIndex;
+                    CurrentState.FirstIndex = rightIndex;
+                    CurrentState.SecondIndex = leftIndex;
                 }
 
                 double taxValue = 0;
@@ -205,11 +323,16 @@ namespace NZTravelMate.ViewModels
                 }
 
                 //Final display
-                FirstOutput = $"{_firstAmount} {_currencies[oldFirstIndex].Name}";
-                SecondOutput = $"{_secondAmount + taxValue} {_currencies[oldSecondIndex].Name}";
+                FirstOutput = $"{_firstAmount} {_currencies[CurrentState.FirstIndex].Name}";
+                SecondOutput = $"{_secondAmount + taxValue} {_currencies[CurrentState.SecondIndex].Name}";
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("\tView Model Calculation Failed: {0}", ex.Message);
             }
             finally
             {
+                CurrentState = CurrentState;
                 isCalculating = false;
             }
         }
@@ -218,9 +341,9 @@ namespace NZTravelMate.ViewModels
         {
             //Bit hacky relying on make calculation to flip it
             isCalculating = true;
-            SecondCurrency = oldSecondIndex;
+            SecondCurrency = CurrentState.FirstIndex;
             isCalculating = false;
-            FirstCurrency = oldSecondIndex;
+            FirstCurrency = CurrentState.SecondIndex;
         }
     }
 }

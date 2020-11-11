@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,14 +11,11 @@ namespace NZTravelMate.Models
 {
     public class Currency
     {
-        public Currency(string code, string name, double rate)
-        {
-            Code = code;
-            Name = name;
-            Rate = rate;
-        }
-
+        //[PrimaryKey, AutoIncrement]
+        //public int Id { get; set; }
+        [PrimaryKey, MaxLength(3), NotNull]
         public string Code { get; set; }
+        [MaxLength(255)]
         public string Name { get; set; }
         public double Rate { get; set; }
     }
@@ -36,7 +34,12 @@ namespace NZTravelMate.Models
                 var code = property.Name;
                 var name = namesByCode[code];
 
-                tempCurrencies.Add(new Currency(code, name, rate));
+                tempCurrencies.Add(new Currency
+                {
+                    Rate = rate,
+                    Code = code,
+                    Name = name
+                });
                 Debug.WriteLine($"Code: {code}, Rate: {rate}, Name: {name}");
             }
             //Alphabetise by code

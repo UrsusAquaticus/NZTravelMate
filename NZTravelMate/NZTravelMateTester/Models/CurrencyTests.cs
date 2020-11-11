@@ -18,7 +18,11 @@ namespace NZTravelMate.Models.Tests
             double rate = 1;
 
             //Act
-            var testCurrency = new Currency(code, name, rate);
+            var testCurrency = new Currency {
+                Code = code,
+                Name = name,
+                Rate = rate
+            };
 
             //Assert
             Assert.AreEqual(testCurrency.Code, code);

@@ -1,7 +1,9 @@
 ﻿using NZTravelMate.Models;
+using NZTravelMate.Persistence;
 using NZTravelMate.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -12,26 +14,31 @@ namespace NZTravelMate.Views
 {
     public partial class MainView : ContentPage
     {
-        //The api string requires a "base currency code" to work off
-        string apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
-        string baseCode = "NZD"; //New Zealand Dollar
-        string isoFile = "NZTravelMate.iso-4217.json";
-
         public MainView()
         {
+            //Get the tables
+            var database = DependencyService.Get<ISQLiteDb>();
+            var currencyStore = new SQLiteCurrencyStore(database);
+            var appStateStore = new SQLiteAppStateStore(database);
+
+            ViewModel = new CurrencyViewModel(currencyStore, appStateStore);
+
             InitializeComponent();
-            //Give the View something to bind to
-            GetCurrencyViewModel();
         }
 
-        async void GetCurrencyViewModel()
+        //Load from database upon app loading
+        //unsure how MVVM friendly it is
+        protected override void OnAppearing()
         {
-            var ERA = new ExchangeRateApi();
-            var CR = await ERA.GetRatesDataAsync(apiString + baseCode);
-            var namesByCode = await CurrencyDataReader.NamesByCode(isoFile);
-            var currencies = CurrencyBuilder.GetCurrencies(CR, namesByCode);
+            ViewModel.LoadDataCommand.Execute(null);
+            base.OnAppearing();
+        }
 
-            this.BindingContext = new CurrencyViewModel(currencies);
+        //Get and set Currency View Model
+        public CurrencyViewModel ViewModel
+        {
+            get { return BindingContext as CurrencyViewModel; }
+            set { BindingContext = value; }
         }
     }
 }

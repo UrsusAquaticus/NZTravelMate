@@ -27,6 +27,8 @@
             <Style x:Key="entryValueStyle" TargetType="Entry">
                 <Setter Property="TextColor"
                         Value="White"/>
+                <Setter Property="BackgroundColor"
+                        Value="Black"/>
                 <Setter Property="Keyboard"
                         Value="Numeric"/>
                 <Setter Property="ClearButtonVisibility"
@@ -42,11 +44,13 @@
             </Style>
             <Style x:Key="labelOutputStyle" TargetType="Label">
                 <Setter Property="TextColor"
+                        Value="Black"/>
+                <Setter Property="BackgroundColor"
                         Value="White"/>
                 <Setter Property="FontSize"
-                        Value="30"/>
+                        Value="20"/>
                 <Setter Property="VerticalTextAlignment"
-                        Value="End"/>
+                        Value="Start"/>
                 <Setter Property="HorizontalTextAlignment"
                         Value="End"/>
             </Style>
