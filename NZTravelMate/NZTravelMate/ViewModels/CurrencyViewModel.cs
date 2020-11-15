@@ -14,9 +14,6 @@ namespace NZTravelMate.ViewModels
     public class CurrencyViewModel : ViewModelBase
     {
         //The api string requires a "base currency code" to work off
-        string apiString = "https://v6.exchangerate-api.com/v6/985c1703315672382c3c7b6c/latest/";
-        string baseCode = "NZD"; //New Zealand Dollar
-        string isoFile = "NZTravelMate.iso-4217.json";
 
         private ObservableCollection<Currency> _currencies;
         private ICurrencyStore _currencyStore;
@@ -175,19 +172,18 @@ namespace NZTravelMate.ViewModels
             try
             {
                 //Get values from API connection
-                var ERA = new ExchangeRateApi();
-                var CR = await ERA.GetRatesDataAsync(apiString + baseCode);
-                if(CR != null)
+                var OERA = new OpenExchangeRateApi();
+                var currencies = await OERA.GetCurrency();
+                if(currencies != null)
                 {
-                    //Get the names from iso file
-                    var namesByCode = await CurrencyDataReader.NamesByCode(isoFile);
-                    Currencies = CurrencyBuilder.GetCurrencies(CR, namesByCode);
-
                     //Save newly constructed currency data to database
+                    Currencies = currencies;
                     await SaveCurrencyData(_currencies);
+                    Debug.WriteLine("UPDATED FROM API");
                 }
                 else
                 {
+                    Debug.WriteLine("LOADED FROM DATABASE");
                     //If API failure load data from Database
                     Currencies = await _currencyStore.GetCurrenciesAsync();
                 }

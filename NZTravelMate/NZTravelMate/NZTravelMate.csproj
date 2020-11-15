@@ -11,12 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="iso-4217.json" />
     <None Remove="References.txt" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="iso-4217.json" />
     <EmbeddedResource Include="References.txt" />
   </ItemGroup>
 
