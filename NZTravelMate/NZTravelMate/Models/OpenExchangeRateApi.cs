@@ -6,21 +6,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NZTravelMate.Models
 {
     //https://docs.openexchangerates.org/docs/currencies-json
     //https://docs.openexchangerates.org/docs/latest-json
-    class OpenExchangeRateApi
+    internal class OpenExchangeRateApi
     {
-        readonly string currencyNames = "https://openexchangerates.org/api/currencies.json?prettyprint=false&show_alternative=false&show_inactive=false&app_id=";
-        readonly string appId = "7317fd8a0d2a42e9ad7b0cbc34f042ef";
-        readonly string currencyRates = "https://openexchangerates.org/api/latest.json?app_id=7317fd8a0d2a42e9ad7b0cbc34f042ef&prettyprint=false&show_alternative=false";
+        private readonly string currencyNames = "https://openexchangerates.org/api/currencies.json?prettyprint=false&show_alternative=false&show_inactive=false&app_id=";
+        private readonly string appId = "7317fd8a0d2a42e9ad7b0cbc34f042ef";
+        private readonly string currencyRates = "https://openexchangerates.org/api/latest.json?app_id=7317fd8a0d2a42e9ad7b0cbc34f042ef&prettyprint=false&show_alternative=false";
 
+        private HttpClient _client;
 
-        HttpClient _client;
         public OpenExchangeRateApi()
         {
             _client = new HttpClient();
@@ -56,6 +55,7 @@ namespace NZTravelMate.Models
 
             return content;
         }
+
         //Get Rates from JSON
         public Rates GetRates(string json)
         {
@@ -72,6 +72,7 @@ namespace NZTravelMate.Models
             }
             return ratesData;
         }
+
         //Get Names from JSON
         public Names GetNames(string json)
         {
@@ -95,7 +96,7 @@ namespace NZTravelMate.Models
             PropertyInfo[] nameProperties = typeof(Names).GetProperties();
 
             List<Currency> tempCurrencies = new List<Currency>();
-            for(int i = 0; i < rateProperties.Length; i++)
+            for (int i = 0; i < rateProperties.Length; i++)
             {
                 var code = nameProperties[i].Name;
                 var name = (string)nameProperties[i].GetValue(names, null);
@@ -115,7 +116,6 @@ namespace NZTravelMate.Models
         }
     }
 
-
     public class Root
     {
         public string Disclaimer { get; set; }
@@ -124,6 +124,7 @@ namespace NZTravelMate.Models
         public string Base { get; set; }
         public Rates Rates { get; set; }
     }
+
     public class Rates
     {
         public double AED { get; set; }
@@ -298,6 +299,7 @@ namespace NZTravelMate.Models
         public double ZMW { get; set; }
         public double ZWL { get; set; }
     }
+
     public class Names
     {
         public string AED { get; set; }
@@ -472,5 +474,4 @@ namespace NZTravelMate.Models
         public string ZMW { get; set; }
         public string ZWL { get; set; }
     }
-
 }

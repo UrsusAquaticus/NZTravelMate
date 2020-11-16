@@ -1,8 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NZTravelMate.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NZTravelMate.Models.Tests
 {
@@ -18,7 +14,8 @@ namespace NZTravelMate.Models.Tests
             double rate = 1;
 
             //Act
-            var testCurrency = new Currency {
+            var testCurrency = new Currency
+            {
                 Code = code,
                 Name = name,
                 Rate = rate

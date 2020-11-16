@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Xamarin.Forms;
 
 namespace NZTravelMate.Behaviours
@@ -21,13 +17,14 @@ namespace NZTravelMate.Behaviours
             base.OnDetachingFrom(entry);
         }
 
-        void OnEntryCompleted(object sender, EventArgs e)
+        private void OnEntryCompleted(object sender, EventArgs e)
         {
             var entry = ((Entry)sender);
             var text = entry.Text;
             //Debug.WriteLine($"{entry.ClassId}: {text}");
         }
     }
+
     public class FocusedEntry : Behavior<Entry>
     {
         protected override void OnAttachedTo(Entry entry)
@@ -41,8 +38,8 @@ namespace NZTravelMate.Behaviours
             entry.Focused -= OnEntryFocused;
             base.OnDetachingFrom(entry);
         }
-        
-        void OnEntryFocused(object sender, EventArgs e)
+
+        private void OnEntryFocused(object sender, EventArgs e)
         {
             var entry = ((Entry)sender);
             entry.Text = "";
@@ -63,7 +60,7 @@ namespace NZTravelMate.Behaviours
             base.OnDetachingFrom(picker);
         }
 
-        void OnPickerChanged(object sender, EventArgs e)
+        private void OnPickerChanged(object sender, EventArgs e)
         {
             var picker = (Picker)sender;
             int selectedIndex = picker.SelectedIndex;

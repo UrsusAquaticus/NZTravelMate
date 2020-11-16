@@ -1,7 +1,4 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NZTravelMate.Models
 {
@@ -9,8 +6,10 @@ namespace NZTravelMate.Models
     {
         [PrimaryKey]
         public int Id { get; set; }
+
         //State of the picker's index
         public int FirstIndex { get; set; }
+
         public int SecondIndex { get; set; }
     }
 }

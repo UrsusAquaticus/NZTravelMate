@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
-using SQLite;
-using Xamarin.Forms;
-using NZTravelMate.Droid;
+﻿using NZTravelMate.Droid;
 using NZTravelMate.Persistence;
-using Windows.Storage;
+using SQLite;
 using System.Diagnostics;
+using System.IO;
+using Windows.Storage;
+using Xamarin.Forms;
 
 [assembly: Dependency(typeof(SQLiteDb))]
 

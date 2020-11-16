@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using NZTravelMate.Models;
 using System.Threading.Tasks;
-using NZTravelMate.Models;
 
 namespace NZTravelMate.ViewModels
 {

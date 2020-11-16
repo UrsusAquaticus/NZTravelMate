@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using NZTravelMate.Models;
+﻿using NZTravelMate.Models;
 using NZTravelMate.Persistence;
 using NZTravelMate.ViewModels;
 using SQLite;
+using System.Threading.Tasks;
 
 namespace NZTravelMate
 {
@@ -24,10 +22,12 @@ namespace NZTravelMate
             var list = await _connection.Table<AppState>().ToListAsync();
             return list.Count > 0 ? list[0] : null;
         }
+
         public async Task AddAppState(AppState appState)
         {
             await _connection.InsertAsync(appState);
         }
+
         public async Task UpdateAppState(AppState appState)
         {
             await _connection.UpdateAsync(appState);

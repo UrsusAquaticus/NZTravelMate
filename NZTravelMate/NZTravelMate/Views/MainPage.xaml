@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:behaviors="clr-namespace:NZTravelMate.Behaviours" 
+             xmlns:behaviors="clr-namespace:NZTravelMate.Behaviours"
              x:Class="NZTravelMate.Views.MainView"
              Title="Calculator">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style x:Key="pickerCurrencyStyle" TargetType="Picker">
                 <Setter Property="ItemsSource"
-                        Value="{Binding Currencies}"/>
+                        Value="{Binding Currencies}" />
             </Style>
             <Style x:Key="entryValueStyle" TargetType="Entry">
             </Style>
@@ -29,19 +29,19 @@
                 <StackLayout VerticalOptions="CenterAndExpand">
                     <ScrollView>
                         <StackLayout>
-                            <Grid >
+                            <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <!--First Input > First Output > Swap Button > Second Input > Tax Output > Second Output-->
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
 
                                 <!--///////////////////////////////////First Input///////////////////////////////////-->
@@ -53,7 +53,7 @@
                                     Grid.Column="0"
                                     Grid.Row="0">
                                     <Picker.Behaviors>
-                                        <behaviors:PickerChanged/>
+                                        <behaviors:PickerChanged />
                                     </Picker.Behaviors>
                                 </Picker>
                                 <!--Value Entry-->
@@ -62,15 +62,15 @@
                                    Grid.Column="1"
                                    Grid.Row="0">
                                     <Entry.Behaviors>
-                                        <behaviors:CompletedEntry/>
-                                        <behaviors:FocusedEntry/>
+                                        <behaviors:CompletedEntry />
+                                        <behaviors:FocusedEntry />
                                     </Entry.Behaviors>
                                 </Entry>
                                 <!--Output-->
                                 <Frame Grid.Column="1"
                                    Grid.Row="1">
                                     <Label Text="{Binding FirstOutput}"
-                                       Style="{StaticResource labelOutputStyle}"/>
+                                       Style="{StaticResource labelOutputStyle}" />
                                 </Frame>
 
                                 <!--///////////////////////////////////Swap Currency Button///////////////////////////////////-->
@@ -79,7 +79,7 @@
                                     Text="Swap"
                                     Grid.Column="0"
                                     Grid.Row="1"
-                                    Grid.RowSpan="2"/>
+                                    Grid.RowSpan="2" />
 
                                 <!--///////////////////////////////////Second Input///////////////////////////////////-->
 
@@ -90,7 +90,7 @@
                                     Grid.Column="0"
                                     Grid.Row="3">
                                     <Picker.Behaviors>
-                                        <behaviors:PickerChanged/>
+                                        <behaviors:PickerChanged />
                                     </Picker.Behaviors>
                                 </Picker>
                                 <!--Value Entry-->
@@ -99,8 +99,8 @@
                                    Grid.Column="1"
                                    Grid.Row="3">
                                     <Entry.Behaviors>
-                                        <behaviors:CompletedEntry/>
-                                        <behaviors:FocusedEntry/>
+                                        <behaviors:CompletedEntry />
+                                        <behaviors:FocusedEntry />
                                     </Entry.Behaviors>
                                 </Entry>
                                 <!--Outputs-->
@@ -109,35 +109,17 @@
                                     <!--TaxOutput-->
                                     <Frame IsVisible="{Binding TaxVisible}">
                                         <Label Text="{Binding TaxOutput}"
-                                           Style="{StaticResource labelOutputStyle}"/>
+                                           Style="{StaticResource labelOutputStyle}" />
                                     </Frame>
                                     <!--Output-->
                                     <Frame>
                                         <Label Text="{Binding SecondOutput}"
-                                           Style="{StaticResource labelOutputStyle}"/>
+                                           Style="{StaticResource labelOutputStyle}" />
                                     </Frame>
                                 </StackLayout>
-
                             </Grid>
                         </StackLayout>
                     </ScrollView>
-
-                    <!--TestDisplay, Not used-->
-                    <ListView ItemsSource="{Binding Currencies}"
-                          BackgroundColor="White"
-                          IsVisible="false">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Grid>
-                                        <Label Text="{Binding Code}" FontAttributes="Bold" />
-                                        <Label Grid.Column="1" Text="{Binding Name}" />
-                                        <Label Grid.Column="2" Text="{Binding Rate}" HorizontalTextAlignment="End" />
-                                    </Grid>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
                 </StackLayout>
 
                 <!--Footer-->
@@ -145,8 +127,8 @@
                     <!--///////////////////////////////////Tax Input///////////////////////////////////-->
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
                         <!--Value-->
@@ -154,19 +136,19 @@
                                 Text="{Binding TaxInput}"
                                 Grid.Column="0">
                             <Entry.Behaviors>
-                                <behaviors:CompletedEntry/>
-                                <behaviors:FocusedEntry/>
+                                <behaviors:CompletedEntry />
+                                <behaviors:FocusedEntry />
                             </Entry.Behaviors>
                         </Entry>
                         <Label  Text="%"
                             Grid.Column="1"
-                            FontSize="30"/>
+                            FontSize="30" />
                     </Grid>
                 </StackLayout>
             </StackLayout>
             <!--Overlay-->
             <!--<ContentView x:Name="overlay" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"  AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding isLoading}">
-            <ActivityIndicator  IsRunning="True" IsVisible="True" Color="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <ActivityIndicator  IsRunning="True" IsVisible="True" Color="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
         </ContentView>-->
         </Grid>
     </Frame>

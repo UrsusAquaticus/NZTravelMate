@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using NZTravelMate.Models;
+﻿using NZTravelMate.Models;
 using NZTravelMate.Persistence;
 using NZTravelMate.ViewModels;
 using SQLite;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace NZTravelMate
 {

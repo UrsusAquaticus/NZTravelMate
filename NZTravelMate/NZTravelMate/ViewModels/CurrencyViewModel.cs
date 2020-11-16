@@ -1,10 +1,7 @@
 ﻿using NZTravelMate.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -32,13 +29,16 @@ namespace NZTravelMate.ViewModels
         private string _taxOutput = "";
         private bool _taxVisible = false;
 
-        bool isCalculating = false;
+        private bool isCalculating = false;
 
         #region Exposed Bindables
+
         //Swap is assigned in the constructor
         public ICommand SwapCommand { private set; get; }
+
         public ICommand LoadDataCommand { get; private set; }
         public ICommand SaveAppStateDataCommand { get; private set; }
+
         public AppState CurrentState
         {
             get { return _appState; }
@@ -54,6 +54,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public ObservableCollection<Currency> Currencies
         {
             get { return _currencies; }
@@ -63,6 +64,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public double FirstAmount
         {
             get { return _firstAmount; }
@@ -73,6 +75,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
+
         public double SecondAmount
         {
             get { return _secondAmount; }
@@ -83,6 +86,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(false);
             }
         }
+
         public int FirstCurrency
         {
             get { return _firstCurrency; }
@@ -93,6 +97,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
+
         public int SecondCurrency
         {
             get { return _secondCurrency; }
@@ -103,6 +108,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
+
         public string FirstOutput
         {
             get { return _firstOutput; }
@@ -112,6 +118,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public string SecondOutput
         {
             get { return _secondOutput; }
@@ -121,6 +128,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
+
         //Tax calculation part
         public double TaxInput
         {
@@ -132,6 +140,7 @@ namespace NZTravelMate.ViewModels
                 MakeCalculation(true);
             }
         }
+
         public string TaxOutput
         {
             get { return _taxOutput; }
@@ -141,6 +150,7 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public bool TaxVisible
         {
             get { return _taxVisible; }
@@ -150,7 +160,8 @@ namespace NZTravelMate.ViewModels
                 OnPropertyChanged();
             }
         }
-        #endregion
+
+        #endregion Exposed Bindables
 
         //Constructor
         public CurrencyViewModel(SQLiteCurrencyStore currencyStore, SQLiteAppStateStore appStateStore)
@@ -174,7 +185,7 @@ namespace NZTravelMate.ViewModels
                 //Get values from API connection
                 var OERA = new OpenExchangeRateApi();
                 var currencies = await OERA.GetCurrency();
-                if(currencies != null)
+                if (currencies != null)
                 {
                     //Save newly constructed currency data to database
                     Currencies = currencies;
@@ -234,9 +245,8 @@ namespace NZTravelMate.ViewModels
             }
         }
 
-
         //Save or update the currency database
-        async Task SaveCurrencyData(ObservableCollection<Currency> currencies)
+        private async Task SaveCurrencyData(ObservableCollection<Currency> currencies)
         {
             Debug.WriteLine($"THERE ARE {currencies.Count}");
             foreach (var currency in currencies)

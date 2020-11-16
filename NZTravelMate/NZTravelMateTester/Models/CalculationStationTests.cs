@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NZTravelMate.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NZTravelMate.Models.Tests
 {
