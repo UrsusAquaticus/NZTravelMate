@@ -6,14 +6,6 @@ namespace NZTravelMate.Models
 {
     public class CalculationStation
     {
-        //Requires a Currency View Model
-        private CurrencyViewModel _currencyViewModel;
-
-        public CalculationStation(CurrencyViewModel currencyViewModel)
-        {
-            _currencyViewModel = currencyViewModel;
-        }
-
         //Main Calculation
         public static double GetValueByRates(double value, double left, double right)
         {

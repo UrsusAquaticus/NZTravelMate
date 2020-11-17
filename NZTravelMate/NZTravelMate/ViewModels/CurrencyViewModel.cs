@@ -13,9 +13,9 @@ namespace NZTravelMate.ViewModels
         //The api string requires a "base currency code" to work off
 
         private ObservableCollection<Currency> _currencies;
-        private ICurrencyStore _currencyStore;
+        private readonly ICurrencyStore _currencyStore;
         private AppState _appState;
-        private IAppStateStore _appStateStore;
+        private readonly IAppStateStore _appStateStore;
 
         private double _firstAmount = 1;
         private double _secondAmount = 1;
@@ -30,7 +30,6 @@ namespace NZTravelMate.ViewModels
         private bool _taxVisible = false;
         private bool _isDataLoaded;
         private string _lastUpdate;
-
         private bool isCalculating = false;
 
         #region Exposed Bindables

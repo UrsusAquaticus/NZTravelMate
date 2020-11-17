@@ -8,7 +8,7 @@ namespace NZTravelMate
 {
     public class SQLiteAppStateStore : IAppStateStore
     {
-        private SQLiteAsyncConnection _connection;
+        private readonly SQLiteAsyncConnection _connection;
 
         public SQLiteAppStateStore(ISQLiteDb db)
         {

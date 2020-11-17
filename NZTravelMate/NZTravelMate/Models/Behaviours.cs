@@ -19,8 +19,8 @@ namespace NZTravelMate.Behaviours
 
         private void OnEntryCompleted(object sender, EventArgs e)
         {
-            var entry = ((Entry)sender);
-            var text = entry.Text;
+            //var entry = ((Entry)sender);
+            //var text = entry.Text;
             //Debug.WriteLine($"{entry.ClassId}: {text}");
         }
     }
@@ -62,8 +62,8 @@ namespace NZTravelMate.Behaviours
 
         private void OnPickerChanged(object sender, EventArgs e)
         {
-            var picker = (Picker)sender;
-            int selectedIndex = picker.SelectedIndex;
+            //var picker = (Picker)sender;
+            //int selectedIndex = picker.SelectedIndex;
 
             //debugging
             //Debug.WriteLine($"{picker.ClassId}: {selectedIndex}");

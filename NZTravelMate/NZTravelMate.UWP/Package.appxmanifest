@@ -8,7 +8,7 @@
 
   <Identity
     Name="b38ca73b-8ba1-4ad0-9e24-b4fc3a4b46fd"
-    Publisher="CN=861acd21-c777-4b8d-84d1-63d7f0c8d8ca"
+    Publisher="CN=Umikuma"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
@@ -45,6 +45,9 @@
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
+        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badge"/>
       </uap:VisualElements>
     </Application>
   </Applications>

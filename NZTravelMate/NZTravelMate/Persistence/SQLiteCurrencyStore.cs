@@ -9,7 +9,7 @@ namespace NZTravelMate
 {
     public class SQLiteCurrencyStore : ICurrencyStore
     {
-        private SQLiteAsyncConnection _connection;
+        private readonly SQLiteAsyncConnection _connection;
 
         public SQLiteCurrencyStore(ISQLiteDb db)
         {
