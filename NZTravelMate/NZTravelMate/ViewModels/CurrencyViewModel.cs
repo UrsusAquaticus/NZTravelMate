@@ -17,17 +17,19 @@ namespace NZTravelMate.ViewModels
         private AppState _appState;
         private IAppStateStore _appStateStore;
 
-        private bool _isDataLoaded;
-
         private double _firstAmount = 1;
         private double _secondAmount = 1;
         private int _firstCurrency = 32; // NZD
         private int _secondCurrency = 2; // AUD
         private string _firstOutput = "";
         private string _secondOutput = "";
+        private string _firstName = "";
+        private string _secondName = "";
         private double _taxInput = 0;
         private string _taxOutput = "";
         private bool _taxVisible = false;
+        private bool _isDataLoaded;
+        private string _lastUpdate;
 
         private bool isCalculating = false;
 
@@ -48,7 +50,7 @@ namespace NZTravelMate.ViewModels
                 _firstCurrency = _appState.FirstIndex;
                 _secondCurrency = _appState.SecondIndex;
                 //Update the appState table
-                Debug.WriteLine($"{_appState.Id}, {_appState.FirstIndex}, {_appState.SecondIndex}");
+                //Debug.WriteLine($"{_appState.Id}, {_appState.FirstIndex}, {_appState.SecondIndex}");
                 SaveAppStateDataCommand.Execute(null);
 
                 OnPropertyChanged();
@@ -65,6 +67,7 @@ namespace NZTravelMate.ViewModels
             }
         }
 
+        //value input
         public double FirstAmount
         {
             get { return _firstAmount; }
@@ -87,6 +90,7 @@ namespace NZTravelMate.ViewModels
             }
         }
 
+        //currency Pickers
         public int FirstCurrency
         {
             get { return _firstCurrency; }
@@ -109,6 +113,7 @@ namespace NZTravelMate.ViewModels
             }
         }
 
+        //Calculation output
         public string FirstOutput
         {
             get { return _firstOutput; }
@@ -129,7 +134,28 @@ namespace NZTravelMate.ViewModels
             }
         }
 
-        //Tax calculation part
+        //Long form labels
+        public string FirstName
+        {
+            get { return _firstName; }
+            set
+            {
+                _firstName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SecondName
+        {
+            get { return _secondName; }
+            set
+            {
+                _secondName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //Tax calculation
         public double TaxInput
         {
             get { return _taxInput; }
@@ -161,6 +187,27 @@ namespace NZTravelMate.ViewModels
             }
         }
 
+        //Loading
+        public bool IsDataLoaded
+        {
+            get { return _isDataLoaded; }
+            set
+            {
+                _isDataLoaded = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string LastUpdate
+        {
+            get { return $"Last Update: {_lastUpdate}"; }
+            set
+            {
+                _lastUpdate = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Exposed Bindables
 
         //Constructor
@@ -178,62 +225,68 @@ namespace NZTravelMate.ViewModels
         //Load Database
         private async Task LoadData()
         {
-            if (_isDataLoaded)
+            if (IsDataLoaded)
                 return;
+
+            //Load previous state
+            var oldState = await _appStateStore.GetAppStateAsync();
+            ObservableCollection<Currency> currencies = null;
+
             try
             {
                 //Get values from API connection
                 var OERA = new OpenExchangeRateApi();
-                var currencies = await OERA.GetCurrency();
-                if (currencies != null)
-                {
-                    //Save newly constructed currency data to database
-                    Currencies = currencies;
-                    await SaveCurrencyData(_currencies);
-                    Debug.WriteLine("UPDATED FROM API");
-                }
-                else
-                {
-                    Debug.WriteLine("LOADED FROM DATABASE");
-                    //If API failure load data from Database
-                    Currencies = await _currencyStore.GetCurrenciesAsync();
-                }
+                currencies = await OERA.GetCurrency();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("\tData Failed to Load: {0}", ex.Message);
             }
-            try
-            {
-                //Load previous state
-                var oldState = await _appStateStore.GetAppStateAsync();
-                if (oldState == null)
-                {
-                    Debug.WriteLine("OLD STATE IS NULL");
-                    var newState = new AppState { Id = 1, FirstIndex = 32, SecondIndex = 2 };
-                    await _appStateStore.AddAppState(newState);
-                    CurrentState = newState;
-                }
-                else
-                {
-                    Debug.WriteLine("READING FROM OLD STATE");
-                    CurrentState = oldState;
-                }
 
-                _isDataLoaded = true;
-                //Hacky way to refresh pickers
-                SwapCurrencies();
-                SwapCurrencies();
-            }
-            catch (Exception ex)
+            if (currencies != null)
             {
-                Debug.WriteLine("\tApp State Failed to Load: {0}", ex.Message);
+                //Save newly constructed currency data to database
+                Currencies = currencies;
+                await SaveCurrencyData(_currencies);
+                Debug.WriteLine("LOADED FROM API");
+                var timeText = DateTime.Now.ToString("g");
+                if (oldState != null)
+                {
+                    LastUpdate = timeText;
+                    oldState.LastUpdated = timeText;
+                }
             }
+            else
+            {
+                //If API fails to load data from Database
+                Debug.WriteLine("LOADED FROM DATABASE");
+                Currencies = await _currencyStore.GetCurrenciesAsync();
+                LastUpdate = oldState.LastUpdated;
+            }
+
+            if (oldState == null)
+            {
+                Debug.WriteLine("CREATING NEW STATE");
+                var newState = new AppState { Id = 1, FirstIndex = 32, SecondIndex = 2, LastUpdated = DateTime.Now.ToString("g") };
+                await _appStateStore.AddAppState(newState);
+                CurrentState = newState;
+            }
+            else
+            {
+                Debug.WriteLine("LOADED FROM PREVIOUS STATE");
+                CurrentState = oldState;
+            }
+
+            IsDataLoaded = true;
+            //Hacky way to refresh pickers
+            SwapCurrencies();
+            SwapCurrencies();
         }
 
+        //Save session information
         private async Task SaveAppStateData()
         {
-            if (!_isDataLoaded)
+            if (!IsDataLoaded)
                 return;
             try
             {
@@ -245,22 +298,22 @@ namespace NZTravelMate.ViewModels
             }
         }
 
-        //Save or update the currency database
+        //Save the currency database
         private async Task SaveCurrencyData(ObservableCollection<Currency> currencies)
         {
-            Debug.WriteLine($"THERE ARE {currencies.Count}");
+            Debug.WriteLine($"THERE ARE {currencies.Count} CURRENCIES");
             foreach (var currency in currencies)
             {
                 var databaseObject = await _currencyStore.GetCurrency(currency.Code);
                 //If it exists in the database, update it. Otherwise create it
                 if (databaseObject == null)
                 {
-                    Debug.WriteLine($"TRYING TO CREATE {currency.Code}");
+                    //Debug.WriteLine($"TRYING TO CREATE {currency.Code}");
                     await _currencyStore.AddCurrency(currency);
                 }
                 else
                 {
-                    Debug.WriteLine($"TRYING TO UPDATE {currency.Code}");
+                    //Debug.WriteLine($"TRYING TO UPDATE {currency.Code}");
                     await _currencyStore.UpdateCurrency(currency);
                 }
             }
@@ -269,11 +322,13 @@ namespace NZTravelMate.ViewModels
         //Calculation
         public void MakeCalculation(bool isFirst)
         {
-            if (isCalculating || !_isDataLoaded) return;
+            //exit if already calculating or if data isn't loaded
+            if (isCalculating || !IsDataLoaded) return;
             try
             {
                 isCalculating = true;
 
+                //Default to 1
                 double firstValue = FirstAmount != 0 ? FirstAmount : 1;
                 double secondValue = SecondAmount != 0 ? SecondAmount : 1;
 
@@ -299,27 +354,27 @@ namespace NZTravelMate.ViewModels
                         _currencies[leftIndex].Rate,
                         _currencies[rightIndex].Rate
                         ), 2);
-                    CurrentState.FirstIndex = leftIndex;
-                    CurrentState.SecondIndex = rightIndex;
                 }
                 else
                 {
+                    //Don't calculate tax
                     FirstAmount = Math.Round(
                         CalculationStation.GetValueByRates(
                         secondValue,
                         _currencies[rightIndex].Rate,
                         _currencies[leftIndex].Rate
                         ), 2);
-                    CurrentState.FirstIndex = rightIndex;
-                    CurrentState.SecondIndex = leftIndex;
                 }
+
+                CurrentState.FirstIndex = leftIndex;
+                CurrentState.SecondIndex = rightIndex;
 
                 double taxValue = 0;
                 //Show or hide Tax
                 if (_taxInput > 0)
                 {
                     taxValue = Math.Round(SecondAmount * (_taxInput * 0.01), 2);
-                    TaxOutput = $"+ Sales Tax: {taxValue}";
+                    TaxOutput = $"+{taxValue}";
                     TaxVisible = true;
                 }
                 else
@@ -329,8 +384,10 @@ namespace NZTravelMate.ViewModels
                 }
 
                 //Final display
-                FirstOutput = $"{_firstAmount} {_currencies[CurrentState.FirstIndex].Name}";
-                SecondOutput = $"{_secondAmount + taxValue} {_currencies[CurrentState.SecondIndex].Name}";
+                FirstOutput = $"{_firstAmount}";
+                SecondOutput = $"{_secondAmount + taxValue}";
+                FirstName = $"{_currencies[CurrentState.FirstIndex].Name}";
+                SecondName = $"{_currencies[CurrentState.SecondIndex].Name}";
             }
             catch (Exception ex)
             {
@@ -343,6 +400,7 @@ namespace NZTravelMate.ViewModels
             }
         }
 
+        //Flip currencies
         public void SwapCurrencies()
         {
             //Bit hacky relying on make calculation to flip it

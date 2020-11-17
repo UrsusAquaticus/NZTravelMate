@@ -11,5 +11,7 @@ namespace NZTravelMate.Models
         public int FirstIndex { get; set; }
 
         public int SecondIndex { get; set; }
+
+        public string LastUpdated { get; set; }
     }
 }

@@ -1,29 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:NZTravelMate.Models;assembly=NZTravelMate"
              x:Class="NZTravelMate.App">
     <Application.Resources>
 
-        <Thickness x:Key="PageMargin">20</Thickness>
-
-        <!-- Colors -->
-        <Color x:Key="AppBackgroundColor">AliceBlue</Color>
-        <Color x:Key="NavigationBarColor">#1976D2</Color>
-        <Color x:Key="NavigationBarTextColor">White</Color>
-
-        <!-- Implicit styles -->
-        <Style TargetType="{x:Type NavigationPage}">
-            <Setter Property="BarBackgroundColor"
-                    Value="{StaticResource NavigationBarColor}" />
-            <Setter Property="BarTextColor"
-                    Value="{StaticResource NavigationBarTextColor}" />
+        <!-- styles -->
+        <Style x:Key="pickerCurrencyStyle" TargetType="Picker">
+            <Setter Property="TextColor"
+                        Value="Black" />
+            <Setter Property="Title"
+                    Value="Currency" />
+            <Setter Property="TitleColor"
+                    Value="Black" />
+            <Setter Property="FontSize"
+                    Value="{OnPlatform Android=30, iOS=30, UWP=30}" />
+            <Setter Property="WidthRequest"
+                    Value="{OnPlatform Android=100, iOS=100, UWP=150}" />
+            <Setter Property="VerticalTextAlignment"
+                    Value="End" />
+            <Setter Property="HorizontalTextAlignment"
+                    Value="Center" />
+            <Setter Property="ItemsSource"
+                    Value="{Binding Currencies}" />
         </Style>
-
-        <Style TargetType="{x:Type ContentPage}"
-               ApplyToDerivedTypes="True">
+        <Style x:Key="entryValueStyle" TargetType="Entry">
+            <Setter Property="TextColor"
+                        Value="Black" />
+            <Setter Property="Keyboard"
+                        Value="Numeric" />
+            <Setter Property="ClearButtonVisibility"
+                        Value="WhileEditing" />
+            <Setter Property="FontSize"
+                        Value="{OnPlatform Android=30, iOS=30, UWP=60}" />
+            <Setter Property="ReturnType"
+                        Value="Done" />
+            <Setter Property="VerticalTextAlignment"
+                        Value="End" />
+            <Setter Property="HorizontalTextAlignment"
+                        Value="End" />
+        </Style>
+        <Style x:Key="labelOutputStyle" TargetType="Label">
+            <Setter Property="TextColor"
+                        Value="gray" />
+            <Setter Property="FontSize"
+                        Value="{OnPlatform Android=30, iOS=30, UWP=30}" />
+            <Setter Property="VerticalTextAlignment"
+                        Value="Start" />
+            <Setter Property="HorizontalTextAlignment"
+                        Value="End" />
+        </Style>
+        <Style x:Key="labelNameStyle" TargetType="Label">
+            <Setter Property="TextColor"
+                        Value="Black" />
+            <Setter Property="FontSize"
+                        Value="{OnPlatform Android=30, iOS=30, UWP=30}" />
+            <Setter Property="FontAttributes"
+                    Value="Italic" />
+            <Setter Property="VerticalTextAlignment"
+                        Value="Start" />
+            <Setter Property="HorizontalTextAlignment"
+                        Value="Start" />
+        </Style>
+        <Style x:Key="frameCardStyle" TargetType="Frame">
+            <Setter Property="BorderColor"
+                        Value="Gray" />
+            <Setter Property="CornerRadius"
+                        Value="5" />
             <Setter Property="BackgroundColor"
-                    Value="{StaticResource AppBackgroundColor}" />
+                        Value="White" />
         </Style>
-
+        <Style x:Key="swapButton" TargetType="ImageButton">
+            <Setter Property="Padding"
+                    Value="10, 10, 10, 10" />
+            <Setter Property="Margin"
+                    Value="0, 0, 20, 0" />
+            <Setter Property="CornerRadius"
+                    Value="{OnPlatform Android=40, iOS=40, UWP=10}" />
+            <Setter Property="HorizontalOptions"
+                    Value="Center" />
+            <Setter Property="VerticalOptions"
+                    Value="CenterAndExpand" />
+            <Setter Property="WidthRequest"
+                    Value="{OnPlatform Android=100, iOS=100, UWP=150}" />
+            <Setter Property="BackgroundColor"
+                    Value="White" />
+            <Setter Property="BorderColor"
+                    Value="Gray" />
+            <Setter Property="BorderWidth"
+                    Value="1" />
+        </Style>
     </Application.Resources>
 </Application>

@@ -8,3 +8,8 @@ https://github.com/shankarmadeshvaran/Xamarin-Blog-Projects/tree/ContactsBook
 Best Practices
 https://github.com/futurice/windows-app-development-best-practices
 
+Icons
+https://material.io/resources/icons/
+
+Images
+https://unsplash.com/photos/73F4pKoUkM0?utm_source=unsplash&utm_medium=referral&utm_content=creditShareLink

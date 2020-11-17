@@ -15,14 +15,14 @@ namespace NZTravelMate.Models
     internal class OpenExchangeRateApi
     {
         private readonly string currencyNames = "https://openexchangerates.org/api/currencies.json?prettyprint=false&show_alternative=false&show_inactive=false&app_id=";
-        private readonly string appId = "7317fd8a0d2a42e9ad7b0cbc34f042ef";
+        //private readonly string appId = "7317fd8a0d2a42e9ad7b0cbc34f042ef";
         private readonly string currencyRates = "https://openexchangerates.org/api/latest.json?app_id=7317fd8a0d2a42e9ad7b0cbc34f042ef&prettyprint=false&show_alternative=false";
 
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public OpenExchangeRateApi()
         {
-            _client = new HttpClient();
+            _client = new HttpClient() { Timeout = TimeSpan.FromSeconds(10) };
         }
 
         public async Task<ObservableCollection<Currency>> GetCurrency()
@@ -38,13 +38,18 @@ namespace NZTravelMate.Models
         //Get JSON from API
         public async Task<string> GetJSON(string url)
         {
-            string content = "";
+            string content;
             try
             {
                 HttpResponseMessage response = await _client.GetAsync(url);
+                Debug.WriteLine($"API Response: {response.StatusCode}");
                 if (response.IsSuccessStatusCode)
                 {
                     content = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    return null;
                 }
             }
             catch (Exception ex)
@@ -108,7 +113,7 @@ namespace NZTravelMate.Models
                     Name = name,
                     Rate = rate
                 });
-                Debug.WriteLine($"Code: {code}, Name: {name}, Rate: {rate}");
+                //Debug.WriteLine($"Code: {code}, Name: {name}, Rate: {rate}");
             }
             //Alphabetise by code
             var sortedList = tempCurrencies.OrderBy(x => x.Code).ToList();

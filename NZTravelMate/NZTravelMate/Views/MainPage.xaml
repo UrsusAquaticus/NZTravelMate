@@ -2,154 +2,205 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:behaviors="clr-namespace:NZTravelMate.Behaviours"
+             xmlns:local="clr-namespace:NZTravelMate.Models;assembly=NZTravelMate"
+             xmlns:converters="clr-namespace:NZTravelMate.Converters"
              x:Class="NZTravelMate.Views.MainView"
-             Title="Calculator">
+             Title="Calculator"
+             BackgroundColor="DimGray">
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="pickerCurrencyStyle" TargetType="Picker">
-                <Setter Property="ItemsSource"
-                        Value="{Binding Currencies}" />
-            </Style>
-            <Style x:Key="entryValueStyle" TargetType="Entry">
-            </Style>
-            <Style x:Key="labelOutputStyle" TargetType="Label">
-            </Style>
-        </ResourceDictionary>
+        <!--Within App.xaml-->
     </ContentPage.Resources>
-    <Frame>
-        <Grid>
-            <!--Content-->
-            <StackLayout>
-                <!--Header-->
-                <StackLayout Orientation="Horizontal" VerticalOptions="Start">
-                    <!--Menu-->
-                </StackLayout>
+    <!--Background image-->
+    <RelativeLayout Grid.Row="1">
+        <Image Source="{local:ImageResource NZTravelMate.Images.background.jpg}"
+               Aspect="AspectFill"
+               Opacity="0.7"
+               RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height}" />
+        <!--Last update-->
+        <Frame BackgroundColor="Transparent"
+               RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
+               RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height}"
+               Margin="-20,0,-20,0">
 
-                <!--Body-->
-                <StackLayout VerticalOptions="CenterAndExpand">
-                    <ScrollView>
+            <Label Text="{Binding LastUpdate}"
+                   Padding="50,10,50,10"
+                   TextColor="White"
+                   BackgroundColor="Black"
+                   Opacity="0.4"
+                   HorizontalTextAlignment="Center"
+                   VerticalOptions="End" />
+        </Frame>
+        <!--Content-->
+        <ScrollView RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width}"
+                    RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height}"
+                    VerticalOptions="CenterAndExpand">
+            <!--Loading-->
+            <Grid>
+                <ActivityIndicator IsRunning="{Binding IsDataLoaded, Converter={converters:BooleanConverter}}"
+                                    Color="White"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center" />
+
+                <StackLayout VerticalOptions="CenterAndExpand"
+                             IsVisible="{Binding IsDataLoaded}">
+
+                    <!--///////////////////////////////////First Input///////////////////////////////////-->
+
+                    <Frame Style="{StaticResource frameCardStyle}"
+                       Margin="40, 10, 40, 0">
                         <StackLayout>
+                            <!--Output-->
+                            <Label Text="{Binding FirstName}"
+                                   Style="{StaticResource labelNameStyle}" />
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="auto" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width ="*" />
                                 </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <!--First Input > First Output > Swap Button > Second Input > Tax Output > Second Output-->
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition Height="auto" />
-                                </Grid.RowDefinitions>
-
-                                <!--///////////////////////////////////First Input///////////////////////////////////-->
 
                                 <!--Currency Picker-->
-                                <Picker Style="{StaticResource pickerCurrencyStyle}"
-                                    ItemDisplayBinding="{Binding Code}"
-                                    SelectedIndex="{Binding FirstCurrency}"
-                                    Grid.Column="0"
-                                    Grid.Row="0">
+                                <Picker ItemDisplayBinding="{Binding Code}"
+                                        SelectedIndex="{Binding FirstCurrency}"
+                                        Style="{StaticResource pickerCurrencyStyle}"
+                                        Grid.Column="0">
                                     <Picker.Behaviors>
                                         <behaviors:PickerChanged />
                                     </Picker.Behaviors>
                                 </Picker>
                                 <!--Value Entry-->
-                                <Entry Style="{StaticResource entryValueStyle}"
-                                   Text="{Binding FirstAmount}"
-                                   Grid.Column="1"
-                                   Grid.Row="0">
+                                <Entry Text="{Binding FirstAmount}"
+                                   Style="{StaticResource entryValueStyle}"
+                                   Grid.Column="1">
                                     <Entry.Behaviors>
                                         <behaviors:CompletedEntry />
                                         <behaviors:FocusedEntry />
                                     </Entry.Behaviors>
                                 </Entry>
-                                <!--Output-->
-                                <Frame Grid.Column="1"
-                                   Grid.Row="1">
-                                    <Label Text="{Binding FirstOutput}"
-                                       Style="{StaticResource labelOutputStyle}" />
-                                </Frame>
-
-                                <!--///////////////////////////////////Swap Currency Button///////////////////////////////////-->
-
-                                <Button Command="{Binding SwapCommand}"
-                                    Text="Swap"
-                                    Grid.Column="0"
-                                    Grid.Row="1"
-                                    Grid.RowSpan="2" />
-
-                                <!--///////////////////////////////////Second Input///////////////////////////////////-->
-
-                                <!--Currency Picker-->
-                                <Picker Style="{StaticResource pickerCurrencyStyle}"
-                                    ItemDisplayBinding="{Binding Code}"
-                                    SelectedIndex="{Binding SecondCurrency}"
-                                    Grid.Column="0"
-                                    Grid.Row="3">
-                                    <Picker.Behaviors>
-                                        <behaviors:PickerChanged />
-                                    </Picker.Behaviors>
-                                </Picker>
-                                <!--Value Entry-->
-                                <Entry Style="{StaticResource entryValueStyle}"
-                                   Text="{Binding SecondAmount}"
-                                   Grid.Column="1"
-                                   Grid.Row="3">
-                                    <Entry.Behaviors>
-                                        <behaviors:CompletedEntry />
-                                        <behaviors:FocusedEntry />
-                                    </Entry.Behaviors>
-                                </Entry>
-                                <!--Outputs-->
-                                <StackLayout Grid.Column="1"
-                                         Grid.Row="4">
-                                    <!--TaxOutput-->
-                                    <Frame IsVisible="{Binding TaxVisible}">
-                                        <Label Text="{Binding TaxOutput}"
-                                           Style="{StaticResource labelOutputStyle}" />
-                                    </Frame>
-                                    <!--Output-->
-                                    <Frame>
-                                        <Label Text="{Binding SecondOutput}"
-                                           Style="{StaticResource labelOutputStyle}" />
-                                    </Frame>
-                                </StackLayout>
                             </Grid>
                         </StackLayout>
-                    </ScrollView>
-                </StackLayout>
+                    </Frame>
 
-                <!--Footer-->
-                <StackLayout Orientation="Horizontal" VerticalOptions="End">
-                    <!--///////////////////////////////////Tax Input///////////////////////////////////-->
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="auto" />
-                        </Grid.ColumnDefinitions>
+                    <!--///////////////////////////////////Center Options///////////////////////////////////-->
 
-                        <!--Value-->
-                        <Entry  Style="{StaticResource entryValueStyle}"
-                                Text="{Binding TaxInput}"
+                    <Frame Margin="40, 0, 40, 0"
+                           Padding="20, 0, 0, 0"
+                           BackgroundColor="Transparent">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width ="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--Swap Currencies-->
+                            <ImageButton Style="{StaticResource swapButton}"
+                                Command="{Binding SwapCommand}"
+                                Source="{local:ImageResource NZTravelMate.Images.Swap.png}"
+                                Grid.Column="0" />
+                            <!--Tax Entry-->
+                            <Frame Style="{StaticResource frameCardStyle}"
+                                   Padding="0, 0, 0, 0"
+                                   Margin="0, 0, 0, 0"
+                                   Grid.Column="1">
+                                <Grid Margin="0,0,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width ="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Entry  Style="{StaticResource entryValueStyle}"
+                                        Text="{Binding TaxInput}"
+                                        Placeholder="Tax"
+                                        Margin="30,0,0,0"
+                                        VerticalTextAlignment="Center"
+                                        Grid.Column="0">
+                                        <Entry.Behaviors>
+                                            <behaviors:CompletedEntry />
+                                            <behaviors:FocusedEntry />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                    <Label  Text="%"
+                                            FontSize="30"
+                                            Margin="0, 20, 20, 20"
+                                            VerticalTextAlignment="Center"
+                                            HorizontalTextAlignment="Center"
+                                            Grid.Column="1" />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </Frame>
+
+                    <!--///////////////////////////////////Second Input///////////////////////////////////-->
+
+                    <Frame Style="{StaticResource frameCardStyle}"
+                       Margin="40, 0, 40, 10">
+                        <StackLayout>
+                            <!--Output-->
+                            <Label Text="{Binding SecondName}"
+                                   Style="{StaticResource labelNameStyle}" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width ="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!--Currency Picker-->
+                                <Picker ItemDisplayBinding="{Binding Code}"
+                                SelectedIndex="{Binding SecondCurrency}"
+                                Style="{StaticResource pickerCurrencyStyle}"
                                 Grid.Column="0">
-                            <Entry.Behaviors>
-                                <behaviors:CompletedEntry />
-                                <behaviors:FocusedEntry />
-                            </Entry.Behaviors>
-                        </Entry>
-                        <Label  Text="%"
-                            Grid.Column="1"
-                            FontSize="30" />
-                    </Grid>
+                                    <Picker.Behaviors>
+                                        <behaviors:PickerChanged />
+                                    </Picker.Behaviors>
+                                </Picker>
+                                <!--Value Entry-->
+                                <Entry Text="{Binding SecondAmount}"
+                                Style="{StaticResource entryValueStyle}"
+                                Grid.Column="1">
+                                    <Entry.Behaviors>
+                                        <behaviors:CompletedEntry />
+                                        <behaviors:FocusedEntry />
+                                    </Entry.Behaviors>
+                                </Entry>
+                            </Grid>
+
+                            <!--Tax Output -->
+                            <StackLayout IsVisible="{Binding TaxVisible}">
+                                <Grid WidthRequest="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="Tax:"
+                                       HorizontalTextAlignment="Start"
+                                       Style="{StaticResource labelOutputStyle}"
+                                       Grid.Column="0" />
+
+                                    <Label Text="{Binding TaxOutput}"
+                                       HorizontalTextAlignment="End"
+                                       Style="{StaticResource labelOutputStyle}"
+                                       Grid.Column="1" />
+                                </Grid>
+                                <Grid WidthRequest="400">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Text="Total:"
+                                       HorizontalTextAlignment="Start"
+                                       Style="{StaticResource labelOutputStyle}"
+                                       Grid.Column="0" />
+
+                                    <Label Text="{Binding SecondOutput}"
+                                       HorizontalTextAlignment="End"
+                                       Style="{StaticResource labelOutputStyle}"
+                                       Grid.Column="1" />
+                                </Grid>
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
                 </StackLayout>
-            </StackLayout>
-            <!--Overlay-->
-            <!--<ContentView x:Name="overlay" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"  AbsoluteLayout.LayoutFlags="All" IsVisible="{Binding isLoading}">
-            <ActivityIndicator  IsRunning="True" IsVisible="True" Color="White" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
-        </ContentView>-->
-        </Grid>
-    </Frame>
+            </Grid>
+        </ScrollView>
+    </RelativeLayout>
 </ContentPage>

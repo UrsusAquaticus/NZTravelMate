@@ -2,6 +2,7 @@
 using NZTravelMate.Persistence;
 using SQLite;
 using System;
+using System.Diagnostics;
 using System.IO;
 using Xamarin.Forms;
 
@@ -15,6 +16,8 @@ namespace NZTravelMate.Droid
         {
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var path = Path.Combine(documentsPath, "MySQLite.db3");
+
+            Debug.WriteLine($"Database path:{path}");
 
             return new SQLiteAsyncConnection(path);
         }
