@@ -64,16 +64,16 @@
                                         SelectedIndex="{Binding FirstCurrency}"
                                         Style="{StaticResource pickerCurrencyStyle}"
                                         Grid.Column="0">
-                                    <Picker.Behaviors>
+                                    <!--<Picker.Behaviors>
                                         <behaviors:PickerChanged />
-                                    </Picker.Behaviors>
+                                    </Picker.Behaviors>-->
                                 </Picker>
                                 <!--Value Entry-->
                                 <Entry Text="{Binding FirstAmount}"
                                    Style="{StaticResource entryValueStyle}"
                                    Grid.Column="1">
                                     <Entry.Behaviors>
-                                        <behaviors:CompletedEntry />
+                                        <!--<behaviors:CompletedEntry />-->
                                         <behaviors:FocusedEntry />
                                     </Entry.Behaviors>
                                 </Entry>
@@ -114,7 +114,7 @@
                                         VerticalTextAlignment="Center"
                                         Grid.Column="0">
                                         <Entry.Behaviors>
-                                            <behaviors:CompletedEntry />
+                                            <!--<behaviors:CompletedEntry />-->
                                             <behaviors:FocusedEntry />
                                         </Entry.Behaviors>
                                     </Entry>
@@ -149,16 +149,16 @@
                                 SelectedIndex="{Binding SecondCurrency}"
                                 Style="{StaticResource pickerCurrencyStyle}"
                                 Grid.Column="0">
-                                    <Picker.Behaviors>
+                                    <!--<Picker.Behaviors>
                                         <behaviors:PickerChanged />
-                                    </Picker.Behaviors>
+                                    </Picker.Behaviors>-->
                                 </Picker>
                                 <!--Value Entry-->
                                 <Entry Text="{Binding SecondAmount}"
                                 Style="{StaticResource entryValueStyle}"
                                 Grid.Column="1">
                                     <Entry.Behaviors>
-                                        <behaviors:CompletedEntry />
+                                        <!--<behaviors:CompletedEntry />-->
                                         <behaviors:FocusedEntry />
                                     </Entry.Behaviors>
                                 </Entry>

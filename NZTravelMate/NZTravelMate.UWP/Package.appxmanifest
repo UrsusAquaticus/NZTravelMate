@@ -8,7 +8,7 @@
 
   <Identity
     Name="b38ca73b-8ba1-4ad0-9e24-b4fc3a4b46fd"
-    Publisher="CN=Umikuma"
+    Publisher="CN=umikuma"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>

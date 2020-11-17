@@ -12,7 +12,7 @@ namespace NZTravelMate.Models
 {
     //https://docs.openexchangerates.org/docs/currencies-json
     //https://docs.openexchangerates.org/docs/latest-json
-    internal class OpenExchangeRateApi
+    public class OpenExchangeRateApi
     {
         private readonly string currencyNames = "https://openexchangerates.org/api/currencies.json?prettyprint=false&show_alternative=false&show_inactive=false&app_id=";
         //private readonly string appId = "7317fd8a0d2a42e9ad7b0cbc34f042ef";
@@ -62,7 +62,7 @@ namespace NZTravelMate.Models
         }
 
         //Get Rates from JSON
-        public Rates GetRates(string json)
+        public static Rates GetRates(string json)
         {
             Rates ratesData;
             try
@@ -79,7 +79,7 @@ namespace NZTravelMate.Models
         }
 
         //Get Names from JSON
-        public Names GetNames(string json)
+        public static Names GetNames(string json)
         {
             Names nameData;
             try
