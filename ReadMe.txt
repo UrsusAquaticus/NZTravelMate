@@ -1,3 +1,2 @@
-This app will be distributed on Googe Play Store and Windows Store.
-Links will be provided to the download page.
-[Amazing App Screenshot](https://raw.githubusercontent.com/UrsusAquaticus/NZTravelMate/master/Screenshot_2021-12-02-19-51-35-36.png)
+Xamarin crossplatform app for converting currencies.
+![Amazing App Screenshot](https://raw.githubusercontent.com/UrsusAquaticus/NZTravelMate/master/Screenshot_2021-12-02-19-51-35-36.png)
